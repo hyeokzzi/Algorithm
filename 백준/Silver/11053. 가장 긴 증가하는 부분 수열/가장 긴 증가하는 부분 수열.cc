@@ -1,5 +1,4 @@
 #include<iostream>
-#include<queue>
 
 int find_long_arr(int *arr, int index, int size);
 int result_arr[1000];
