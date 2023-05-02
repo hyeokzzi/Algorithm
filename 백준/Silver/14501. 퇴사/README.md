@@ -93,7 +93,8 @@
 
 입력받은 값의 앞에서부터 접근을 하면 발생하는 문제는 **축적이라는 개념이 사라진다**는 것이었다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a8f739e7-50cb-4e40-9458-d3c99649d064/Untitled.png)
+![image](https://user-images.githubusercontent.com/87352996/235661955-20fc4860-a2bf-46f9-935b-bce2444fc802.png)
+
 
 다음과 같이 N이 7이고 값들이 주어졌다고 하자. 계산을 다음과 같이 진행 할 것이다.
 
@@ -105,7 +106,8 @@
 
 그래서 `남은 일수`를 기준으로 접근했다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/25c51e80-6788-4bb4-9de9-557f1324d10c/Untitled.png)
+![image](https://user-images.githubusercontent.com/87352996/235662004-ead7f16b-8053-4dcb-b649-7e8d77f1a73f.png)
+
 
 위 표와 같이 인덱스를 남은 일수를 기준으로 배열의 최댓값들을 저장하는 방식이다.
 
@@ -147,7 +149,8 @@ for (int i = 1; i <= N; i++) {         // i는 남은 일 수
 
 문제가 발생되는 예시는 다음과 같다.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/873a51a4-d0ba-4e8f-8f07-4cb0104bb115/Untitled.png)
+![image](https://user-images.githubusercontent.com/87352996/235661780-1afc2a15-f8d1-40d6-ac7c-8fa5b31f13e0.png)
+
 
 위 표와 같이 4일차의 상담을 진행할 경우 7일차와의 상담을 더한 최댓값이 50일 것이다.
 
