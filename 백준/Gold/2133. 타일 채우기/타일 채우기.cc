@@ -1,23 +1,23 @@
 #include<iostream>
 using namespace std;
-int dp(int N) {
-	if (N % 2 == 1) return 0;
-	if (N >= 4) {
-		int sum = 2;
-		for (int i = N; i >= 4; i -= 2) {
-			sum += 2 * dp(i - 4);
-		}
-		sum += 3 * dp(N - 2);
-		return sum;
-	}
-	if (N == 2) return 3;
-	if (N == 0) return 0;
-	
-}
-
+int dp[31];
 int main() {
 	int N;
 	cin >> N;
-	cout << dp(N);
+
+	dp[2] = 3;
+	dp[0] = 1;
+
+	for (int i = 4; i <= N; i+=2) {
+		for (int j = i; j > 0; j -= 2) {
+			if (j != 2) {
+				dp[i] += 2 * dp[i - j];
+			}
+			else if (j == 2) {
+				dp[i] += dp[2] * dp[i - j];
+			}
+		}
+	}
+	cout << dp[N];
 	return 0;
 }
