@@ -3,10 +3,30 @@
 #include<queue>
 
 #define INF 210000000
-
 using namespace std;
-
 vector<pair<int, int>> arr[801];
+
+void dijkstra(int*distance, int node, int N) {
+	priority_queue<pair<int, int>> que;
+	bool visited[801] = { false };
+	for (int i = 1; i <= N; i++) distance[i] = INF;
+	distance[node] = 0;
+	que.push({ 0,node });
+	while (!que.empty()) {
+		int current_node = que.top().second;
+		que.pop();
+		if (visited[current_node]) continue;
+		visited[current_node] = true;
+		for (auto e : arr[current_node]) {
+			int next_node = e.first;
+			int next_distance = e.second;
+			if (distance[current_node] + next_distance < distance[next_node]) {
+				distance[next_node] = distance[current_node] + next_distance;
+				que.push({ -distance[next_node], next_node });
+			}
+		}
+	}
+}
 
 int main() {
 	int N, E;
@@ -24,64 +44,22 @@ int main() {
 	cin >> v1 >> v2;
 	
 	// 두 정점에 대해 각각 다익스트라 수행
-	priority_queue<pair<int, int>> que1;
-	priority_queue<pair<int, int>> que2;
+	int sum1 = 0, sum2 = 0;
+	int distance[801] = { 0, };
+	dijkstra(distance, v1, N);
+	sum1 += distance[1] + distance[v2];
+	sum2 += distance[N];
 
-	int distance_v1[801] = { 0, };
-	int distance_v2[801] = { 0, };
+	dijkstra(distance, v2, N);
+	sum1 += distance[N];
+	sum2 += distance[1] + distance[v1];
 
-	bool visited_v1[801] = { false };
-	bool visited_v2[801] = { false };
-	for (int i = 1; i <= N; i++) {
-		distance_v1[i] = INF;
-		distance_v2[i] = INF;
-	}
-
-	// v1에 대한 다익스트라
-	distance_v1[v1] = 0; 
-	que1.push({ 0,v1 });
-	while (!que1.empty()) {
-		int a = que1.top().second;
-		que1.pop();
-		if (visited_v1[a]) continue;
-		visited_v1[a] = true;
-		for (auto e : arr[a]) {
-			int b = e.first, w = e.second;
-			if (distance_v1[a] + w < distance_v1[b]) {
-				distance_v1[b] = distance_v1[a] + w;
-				que1.push({ -distance_v1[b], b });
-			}
-		}
-	}
-	
-	
-	// v2에 대한 다익스트라
-	distance_v2[v2] = 0;
-	que2.push({ 0,v2 });
-	while (!que2.empty()) {
-		int a = que2.top().second;
-		que2.pop();
-		if (visited_v2[a]) continue;
-		visited_v2[a] = true;
-		for (auto e : arr[a]) {
-			int b = e.first, w = e.second;
-			if (distance_v2[a] + w < distance_v2[b]) {
-				distance_v2[b] = distance_v2[a] + w;
-				que2.push({ -distance_v2[b], b });
-			}
-		}
-	}
-
-
-	int sum1 = distance_v1[1] + distance_v1[v2] + distance_v2[N]; // 0 -> v1 -> v2 -> N 
-	int sum2 = distance_v2[1] + distance_v2[v1] + distance_v1[N]; // 0 -> v2 -> v1 -> N
-	int ans = min(sum1, sum2);
-	if (ans >= INF) {
+	int sum = min(sum1, sum2);
+	if (sum >= INF) {
 		cout << -1;
 	}
-	else cout << min(sum1, sum2);
-
-
-
+	else {
+		cout << sum;
+	}
 	return 0;
 }
