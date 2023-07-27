@@ -1,38 +1,26 @@
 #include<iostream>
-#include<vector>
 using namespace std;
-int N, sum;
+int N, S;
 int arr[20];
-bool visited[20];
-vector<int> vec;
 int cnt = 0;
-
-void backtracking(int idx) {
-	if (!vec.empty()) {
-		int t = 0;
-		for (auto& e : vec) {
-			t += e;
-		}
-		if (t == sum) {
-			cnt++;
-		}
+void func(int level, int sum) {
+	if (level == N) {
+		// 합이 같은지 확인
+		if (sum == S)  cnt++;
+		return;
 	}
-
-	for (int i = idx; i < N; i++) {
-		vec.push_back(arr[i]);
-		backtracking(i + 1);
-		vec.pop_back();
-	}
-
+	func(level + 1, sum);
+	func(level + 1, sum + arr[level]);
 }
 
 
 int main() {
-	cin >> N >> sum;
+	cin >> N >> S;
 	for (int i = 0; i < N; i++) {
 		cin >> arr[i];
 	}
-	backtracking(0);
+	func(0, 0);
+	if (S == 0) cnt--;
 	cout << cnt;
 	return 0;
 }
