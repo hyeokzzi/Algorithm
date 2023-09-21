@@ -1,44 +1,38 @@
 #include<iostream>
+#include<cmath>
 #include<queue>
-
-struct compare {
+using namespace std;
+struct cmp {
 	bool operator()(int a, int b) {
-		if (abs(a) > abs(b)) {
-			return true;
-		}
-		else if (abs(a) < abs(b)) {
-			return false;
-		}
+		if (abs(a) > abs(b)) return true;
+		else if(abs(a) < abs(b))return false;
 		else {
-			if (a > b) {
-				return true;
-			}
+			if (a > b) return true;
 			else return false;
 		}
 	}
 };
-std::priority_queue<int, std::vector<int>, compare> arr;
+priority_queue<int, vector<int>, cmp> que;
 int main() {
-
 	int N;
-	std::cin >> N;
-	int index = 0;
+	cin >> N;
 	for (int i = 0; i < N; i++) {
-
 		int num;
-		std::cin >> num;
-		if (num != 0) {
-			arr.push(num);
-		}
-		else {
-			if (arr.empty() == true) {
-				std::cout << '0' << '\n';
+		cin >> num;
+
+		if (num == 0) {
+			// 출력 -> pop
+			if (que.empty()) {
+				cout << "0" << '\n';
 			}
 			else {
-				std::cout << arr.top() << '\n';
-				arr.pop();
-
+				cout << que.top() << '\n';
+				que.pop();
 			}
+		}
+		else {
+			// push
+			que.push(num);
 		}
 	}
 
