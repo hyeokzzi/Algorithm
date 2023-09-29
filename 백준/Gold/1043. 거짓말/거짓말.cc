@@ -1,12 +1,14 @@
 #include<iostream>
 #include<vector>
 #include<queue>
-#include<algorithm>
 using namespace std;
+
 vector<int> arr[51];
+vector<int> store;
 queue<int> que;
 int visit[51] = { false, };
 int pushed[51] = { false, };
+
 void bfs(int M) {
 	while (que.empty() == false) {
 		int size = que.size();
@@ -14,14 +16,18 @@ void bfs(int M) {
 			int num = que.front();
 			int flag = 0;
 			que.pop();
+
 			for (int j = 1; j <= M; j++) {
-				// 있다.
-				if (find(arr[j].begin(), arr[j].end(), num) != arr[j].end()) {
-					for (auto& k : arr[j]) {
-						if (pushed[k] == false) {
-							que.push(k);
-							pushed[k] = true;
+				for (auto& e : arr[j]) {
+					// 진실을 아는 사람과 같이 있을 때
+					if (num == e) {
+						for (auto& k : arr[j]) {
+							if (pushed[k] == false) { 
+								que.push(k);
+								pushed[k] = true;
+							}
 						}
+						break;
 					}
 				}
 			}
@@ -51,7 +57,17 @@ int main() {
 		}
 	}
 	
+	/*
+		거짓말을 할 수 있는 조건
+		1. 아무도 이야기를 들은적이 없을 때
+		2. 모두가 거짓말 이야기를 들었을 때
+		3. 거짓이야기를 들은 사람과 이야기를 듣지 않은사람만 있을 때
+		=> 진실을 아는 사람이 아예 없을 떄 가능
+	*/
+
+	// 진실을 듣는 경우의 수 처리 -> BFS?
 	bfs(M);
+	// 아닌 파티 찾기 -> 탐색
 	int lie = 0;
 	for (int i = 1; i <= M; i++) {
 		int cnt = 0;
