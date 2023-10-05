@@ -1,22 +1,25 @@
 #include<iostream>
-int arr[30][30] = { 0, };
-int dp_combination(int x, int y) {
-	
-	if (x == y || x == 0) return 1;
-	else if (arr[x][y] != 0) return arr[x][y];
-	else {
-		return arr[x][y] = dp_combination(x - 1, y - 1) + dp_combination(x, y - 1);
-	}
-}
-
-int main() {
-	int T;
-	std::cin >> T;
+using namespace std;
+int T, N, K;
+int main(){
+	cin >> T;
 	for (int i = 0; i < T; i++) {
-		int N, M;
-		int arr[30] = { 1,0 };
-		std::cin >> N >> M;
-		std::cout << dp_combination(N, M) << '\n';
+		cin >> N >> K;
+		long long dp[31][31] = { 0, };
+
+		for (int j = 0; j <= K; j++) {
+			dp[j][0] = 1;
+			dp[j][j] = 1;
+			dp[j][1] = j;
+		}
+
+		for (int j = 2; j <= K; j++) {
+			for (int k = 1; k < j; k++) {
+				dp[j][k] = dp[j - 1][k] + dp[j - 1][k - 1];
+			}
+		}
+		cout << dp[K][N] << '\n';
+		
 	}
 	return 0;
 }
