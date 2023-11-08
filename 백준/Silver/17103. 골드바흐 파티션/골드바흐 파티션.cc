@@ -16,21 +16,18 @@ int main() {
 	}
 	for (int i = 2; i <= 1000000; i++) {
 		if (arr[i] == i) {
-			vec.push_back(i);
-			s.insert(i);
 			for (int j = i * 2; j <= 1000000; j+=i) arr[j] = 0;
 		}
 	}
-	int size = vec.size();
+
 	int T;
 	cin >> T;
 	while (T--) {
 		int N;
 		int cnt = 0;
 		cin >> N;
-		for (int i = 0; i < size; i++) {
-			if (vec[i] * 2 > N) break;
-			if (s.find(N - vec[i]) != s.end()) cnt++;
+		for (int i = 2; i <= N / 2; i++) {
+			if (arr[i] != 0 && arr[N - i] != 0) cnt++;
 		}
 		cout << cnt << '\n';
 	}
