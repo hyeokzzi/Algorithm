@@ -1,107 +1,83 @@
 #include<iostream>
 #include<queue>
+using namespace std;
+int N, M, H;
 int arr[101][101][101];
 
-struct node {
-	int x;
-	int y;
-	int z;
-};
-std::queue<node> que;
+int dx[6] = {0, 1, 0, -1, 0, 0};
+int dy[6] = {-1, 0, 1, 0, 0, 0};
+int dh[6] = {0, 0, 0, 0, -1, 1};
 
-int level = 0;
-
-void bfs(int H, int M, int N) {
-	// 이번 단계에 할 정점들 
-	std::queue<node> save;
-
-
-	while(que.empty() != true) {
-		node a;
-		a.x = que.front().x;
-		a.y = que.front().y;
-		a.z = que.front().z;
-		save.push(a);
-		que.pop();
-	}
-	// queue_index를 통해서 다음 단계에 갈 정점들을 find
-	while(save.empty()!=true){
-
-		int tx[6] = { 1, -1, 0, 0, 0, 0 };
-		int ty[6] = { 0, 0, 1, -1, 0, 0 };
-		int tz[6] = { 0, 0, 0, 0, 1, -1 };
-		for (int k = 0; k < 6; k++) {
-			int nx = save.front().x + tx[k];
-			int ny = save.front().y + ty[k];
-			int nz = save.front().z + tz[k];
-			if ((nx > 0 && nx <= M) && (ny > 0 && ny <= N) && (nz > 0 && nz <= H) && arr[nz][ny][nx] == 0) {
-				node a;
-				a.x = nx;
-				a.y = ny;
-				a.z = nz;
-				que.push(a);
-				arr[nz][ny][nx] = 1;
-			}
-		}
-		save.pop();
-	}
-
-	if (que.empty() != true) {
-		level++;
-		bfs(H, M, N);
-	}
+typedef struct{
+  int h;
+  int y;
+  int x;
+}node;
+queue<node> que;
+int cnt_t;
+void input(){
+  cin >> M >> N >> H;
+  for(int k =0; k < H; k++){
+    for(int i = 0; i < N; i++){
+      for(int j = 0; j < M; j++){
+        cin >> arr[k][i][j];
+        if(arr[k][i][j] == 1) {
+          que.push({k, i, j});
+        }
+        else if(arr[k][i][j] == 0)cnt_t++;
+      }
+    } 
+  }
+  return;
 }
 
+void solution(){
+  int cnt = 0;
+  if(que.empty()) {
+    if(cnt_t > 0) cout << "-1";
+    else cout << "0";
+    return;
+  }
+  while(!que.empty()){
+    int size = que.size();
+    while(size--){
+      node temp = que.front();
+      que.pop();
+      for(int i = 0; i < 6; i++){
+        int tx = temp.x + dx[i];
+        int ty = temp.y + dy[i];
+        int th = temp.h + dh[i];
+        if(tx < 0 || tx >= M || ty < 0 || ty >= N || th < 0 || th >= H) continue;
+        if(arr[th][ty][tx] != 0) continue;
+        arr[th][ty][tx] = 1;
+        que.push({th, ty, tx});
+      }
+    }
+    cnt++;
+  }
+  bool checked = false;
+  for(int k =0; k < H; k++){
+    for(int i = 0; i < N; i++){
+      for(int j = 0; j < M; j++){
+        if(arr[k][i][j] == 0){
+          checked = true;
+        }
+      }
+      if(checked) break;
+    }
+    if(checked) break;
+  }
+  if(checked) cout << "-1";
+  else cout << cnt - 1;
+}
 
-
-int main() {
-
-	std::cin.tie(0);
-	std::cout.tie(0);
-	std::ios_base::sync_with_stdio(0);
-
-	int M, N, H;
-	std::cin >> M >> N >> H;
-	for (int i = 1; i <= H; i++) {
-		for (int j = 1; j <= N; j++) {
-			for (int k = 1; k <= M; k++) {
-				std::cin >> arr[i][j][k];
-			}
-		}
-	}
-	// 시작 익은 토마토 위치 queue에 저장
-	for (int i = 1; i <= H; i++) {
-		for (int j = 1; j <= N; j++) {
-			for (int k = 1; k <= M; k++) {
-				if (arr[i][j][k] == 1) {
-					node a;
-					a.x = k;
-					a.y = j;
-					a.z = i;
-					que.push(a);
-				}
-			}
-		}
-	}
-
-	bfs(H, M, N);
-
-	for (int i = 1; i <= H; i++) {
-		for (int j = 1; j <= N; j++) {
-			for (int k = 1; k <= M; k++) {
-				if (arr[i][j][k] == 0) {
-					std::cout << "-1";
-					return 0;
-				}
-			}
-		}
-	}
-	if (level == 0) {
-		std::cout << "0";
-	}
-	else {
-		std::cout << level;
-	}
-
-	return 0;
+int main(int argc, char** argv)
+{
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  cout.tie(0);
+  input();
+  solution();
+  
+   return 0;
 }
