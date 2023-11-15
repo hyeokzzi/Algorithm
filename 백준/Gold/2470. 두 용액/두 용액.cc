@@ -1,41 +1,38 @@
 #include<iostream>
 #include<algorithm>
-#include<vector>
 #include<cmath>
 using namespace std;
-vector<int>vec;
-int N;
-void input() {
-	cin >> N;
-	for (int i = 0; i < N; i++) {
-		int num;
-		cin >> num;
-		vec.push_back(num);
-	}
-}
-void solution() {
-	sort(vec.begin(), vec.end());
-	int min_diff = 2100000000;
-	int start_idx = 0, end_idx = N - 1;
-	int sm = 0, bi = 0;
-	while (start_idx < end_idx) {
-		int sum = vec[start_idx] + vec[end_idx];
-		if (abs(sum) < min_diff) {
-			sm = min(vec[start_idx], vec[end_idx]);
-			bi = max(vec[start_idx], vec[end_idx]);
-			min_diff = abs(sum);
-		}
+int arr[100001], N;
 
-		if (sum < 0)start_idx++;
-		else end_idx--;
-	}
-	cout << sm << " " << bi;
+void input(){
+  cin >> N;
+  for(int i = 0; i < N; i++) cin >> arr[i];
 }
 
+void solution(){
+  sort(arr, arr+N);
+  int st = 0;
+  int en = N-1;
+  int sum = abs(arr[st] + arr[en]);
+  int min_value = arr[st], max_value = arr[en];
+  while(st < en){
+    if(sum > abs(arr[st] + arr[en])){
+      min_value = arr[st];
+      max_value = arr[en];
+      sum = abs(arr[st] + arr[en]);
+    }
 
-int main() {
-	input();
-	solution();
+    if(arr[st] + arr[en] < 0) st++;
+    else en--;
+  }
+  cout << min_value << " " << max_value;
+  return;
+}
 
-	return 0;
+int main(int argc, char** argv)
+{
+  input();
+  solution();
+  
+   return 0;
 }
