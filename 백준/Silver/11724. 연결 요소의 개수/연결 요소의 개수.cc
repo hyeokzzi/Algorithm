@@ -1,55 +1,39 @@
 #include<iostream>
-// DFS 문제
-// 깊이 우선 탐색
+#include<vector>
+using namespace std;
+int N, M;
+vector<int> arr[1001];
+bool visited[1001];
 
-// 한 점을 통해 연결된 모든 것을 지움
-int arr[1001][1001];
-int connect_component = 0;
-int check_arr[1001];
-void find_component(int index, int size) {
-
-	int flag = 0;
-	for (int i = 1; i <= size; i++) {
-		if (index != i && arr[index][i] == 1) {
-			arr[index][i] = 0;
-			arr[i][index] = 0;
-
-			check_arr[i] = 1;
-
-			find_component(i, size);
-			flag++;
-		}
-	}
-	return;
-
+void input(){
+  cin >> N >> M;
+  for(int i = 0; i < M; i++){
+    int st, en;
+    cin >> st >> en;
+    arr[st].push_back(en);
+    arr[en].push_back(st);
+  }
+}
+void func(int idx){
+  visited[idx] = true;
+  for(auto &e : arr[idx]){
+    if(visited[e]) continue;
+    func(e);
+  }
+}
+void solution(){
+  int cnt = 0;
+  for(int i = 1; i <= N; i++){
+    if(visited[i]) continue;
+    func(i);
+    cnt++;
+  }
+  cout << cnt;
 }
 
-
-int main() {
-	std::cin.tie(0);
-	std::cout.tie(0);
-	std::ios_base::sync_with_stdio(false);
-
-	int N, M;
-	std::cin >> N >> M;
-	for (int i = 0; i < M; i++) {
-		int start_node;
-		int end_node;
-		std::cin >> start_node >> end_node;
-		// 연결 표시
-		arr[start_node][end_node] = 1;
-		arr[end_node][start_node] = 1;
-	}
-	int cnt = 0;
-	for (int i = 1; i <= N; i++) {
-		if (check_arr[i] != 1) {
-			find_component(i, N);
-			cnt++;
-		}
-	}
-	
-	std::cout << cnt;
-		
-
-	return 0;
+int main(int argc, char** argv)
+{
+  input();
+  solution();
+   return 0;
 }
