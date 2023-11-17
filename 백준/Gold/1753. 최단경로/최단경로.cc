@@ -1,55 +1,54 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<cmath>
 using namespace std;
-#define INF 1000000000
-vector<pair<int,int>> arr[20001];
+#define INF 2100000000
+int dist[20001];
+vector<pair<int, int>> arr[20001];
+bool visited[20001] = { false };
+int V, E, K;
+
+void input() {
+	cin >> V >> E >> K;
+	for (int i = 0; i < E; i++) {
+		int st, en, distance;
+		cin >> st >> en >> distance;
+		arr[st].push_back({ en, distance });
+	}
+}
+
+void solution() {
+	priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> que;
+
+	for (int i = 1; i <= V; i++) {
+		dist[i] = INF;
+	}
+	dist[K] = 0;
+	que.push({ 0,K });
+	while (!que.empty()) {
+		int idx = que.top().second;
+		int distance = que.top().first;
+		que.pop();
+
+		if (visited[idx]) continue;
+		visited[idx] = true;
+
+		for (auto& e : arr[idx]) {
+			int temp = dist[e.first];
+			dist[e.first] = min(dist[e.first], dist[idx] + e.second);
+			if (temp != dist[e.first]) que.push({ dist[e.first], e.first });
+		}
+	}
+
+	for (int i = 1; i <= V; i++) {
+		if (dist[i] == INF) cout << "INF" << '\n';
+		else cout << dist[i] << '\n';
+	}
+}
 
 int main() {
-	int V, E, startNode;
-	cin >> V >> E >> startNode;
-
-	for (int i = 0; i < E; i++) {
-		int sNode, eNode, distance;
-		cin >> sNode >> eNode >> distance;
-		arr[sNode].push_back({ eNode, distance });
-	}
-
-	priority_queue<pair<int, int>> que;
-	int distance[20001] = { 0, };
-	bool visited[20001] = { false };
-
-	for (int i = 1; i <= V; i++) {
-		distance[i] = INF;
-	}
-	distance[startNode] = 0;
-	que.push({ 0,startNode });
-	while (!que.empty()) {
-		int current = que.top().second;
-		que.pop();
-		if (visited[current]) continue;
-		visited[current] = true;
-		
-		for (auto e : arr[current]) {
-			int next_node = e.first;
-			int next_distance = e.second;
-
-			if (distance[current] + next_distance < distance[next_node]) {
-				distance[next_node] = distance[current] + next_distance;
-				que.push({ -distance[next_node], next_node });
-			}
-		}
-	}
-
-
-
-	for (int i = 1; i <= V; i++) {
-		if (distance[i] >= INF) {
-			cout << "INF" << '\n';
-		}
-		else {
-			cout << distance[i] << '\n';
-		}
-	}
+	input();
+	solution();
 	return 0;
 }
